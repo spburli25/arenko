@@ -1,0 +1,41 @@
+.datecontrols-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.datecontrols-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-picker {
+    background-color: white;
+}
+
+.date-picker-container {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.validation-error {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .datecontrols-container {
+        margin-left: 2rem;
+    }
+
+    .datecontrols-wrapper {
+        flex-direction: column;
+    }
+
+    .date-picker {
+        width: 100%;
+    }
+}
