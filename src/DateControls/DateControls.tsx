@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { ToggleButtonGroup, ToggleButton, Alert } from '@mui/material';
 import dayjs from 'dayjs';
 import { DataType, DateValidationError } from '../types';
@@ -28,12 +28,15 @@ export const DateControls: React.FC<DateControlsProps> = ({
     <div className="datecontrols-container">
       <div className="datecontrols-wrapper">
         <div className="date-picker-container">
-          <DatePicker
+          <DateTimePicker
             label="From"
             value={fromDate ? dayjs(fromDate) : null}
             onChange={(newValue) => onFromChange(newValue ? newValue.toDate() : null)}
             className="date-picker"
-            maxDate={dayjs()}
+            maxDateTime={dayjs()}
+            views={['year', 'month', 'day', 'hours', 'minutes']}
+            format="DD/MM/YYYY HH:mm"
+            ampm={false}
             slotProps={{
               textField: {
                 error: !!validationErrors.fromDate,
@@ -44,12 +47,15 @@ export const DateControls: React.FC<DateControlsProps> = ({
         </div>
 
         <div className="date-picker-container">
-          <DatePicker
+          <DateTimePicker
             label="To"
             value={toDate ? dayjs(toDate) : null}
             onChange={(newValue) => onToChange(newValue ? newValue.toDate() : null)}
             className="date-picker"
-            maxDate={dayjs()}
+            maxDateTime={dayjs()}
+            views={['year', 'month', 'day', 'hours', 'minutes']}
+            format="DD/MM/YYYY HH:mm"
+            ampm={false}
             slotProps={{
               textField: {
                 error: !!validationErrors.toDate,

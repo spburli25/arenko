@@ -23,15 +23,15 @@ vi.mock('@mui/material', async () => {
 });
 
 vi.mock('@mui/x-date-pickers', () => ({
-  DatePicker: ({ label, onChange, value, className }: { label: string; onChange: (date: dayjs.Dayjs) => void; value: dayjs.Dayjs | null; className?: string }) => (
+  DateTimePicker: ({ label, onChange, value, className }: { label: string; onChange: (date: dayjs.Dayjs) => void; value: dayjs.Dayjs | null; className?: string }) => (
     <div className={className}>
       <label>{label}</label>
       <input
         type="text"
-        data-testid={`${label}-datepicker`}
-        value={value ? value.format('MM/DD/YYYY') : ''}
+        data-testid={`${label}-datetime-picker`}
+        value={value ? value.format('DD/MM/YYYY HH:mm') : ''}
         onChange={(e) => {
-          const date = dayjs(e.target.value);
+          const date = dayjs(e.target.value, 'DD/MM/YYYY HH:mm');
           if (date.isValid()) {
             onChange(date);
           }
@@ -65,10 +65,10 @@ describe('DateControls', () => {
     vi.clearAllMocks();
   });
 
-  it('renders date pickers and toggle buttons', () => {
+  it('renders datetime pickers and toggle buttons', () => {
     renderDateControls();
-    expect(screen.getByTestId('From-datepicker')).toBeInTheDocument();
-    expect(screen.getByTestId('To-datepicker')).toBeInTheDocument();
+    expect(screen.getByTestId('From-datetime-picker')).toBeInTheDocument();
+    expect(screen.getByTestId('To-datetime-picker')).toBeInTheDocument();
     expect(screen.getByText(/actual/i)).toBeInTheDocument();
     expect(screen.getByText(/forecast/i)).toBeInTheDocument();
   });
@@ -83,17 +83,31 @@ describe('DateControls', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Invalid date range');
   });
 
-  it('handles date changes', async () => {
+  it('handles datetime changes', async () => {
     const user = userEvent.setup();
     renderDateControls();
 
-    const fromInput = screen.getByTestId('From-datepicker');
+    const fromInput = screen.getByTestId('From-datetime-picker');
     
     await user.clear(fromInput);
-    await user.type(fromInput, '01/01/2024');
+    await user.type(fromInput, '01/01/2024 09:30');
     
     await waitFor(() => {
       expect(mockProps.onFromChange).toHaveBeenCalled();
+    });
+  });
+
+  it('handles invalid datetime input', async () => {
+    const user = userEvent.setup();
+    renderDateControls();
+
+    const fromInput = screen.getByTestId('From-datetime-picker');
+    
+    await user.clear(fromInput);
+    await user.type(fromInput, 'invalid date');
+    
+    await waitFor(() => {
+      expect(mockProps.onFromChange).not.toHaveBeenCalled();
     });
   });
 });
